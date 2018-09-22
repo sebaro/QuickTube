@@ -1,0 +1,12 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+
+<qresource prefix="/">
+    <file>main.qml</file>
+    <file>images/logo.png</file>
+    <file>images/search.png</file>
+    <file>images/up.png</file>
+    <file>images/down.png</file>
+</qresource>
+
+</RCC>
