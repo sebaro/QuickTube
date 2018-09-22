@@ -1,7 +1,7 @@
 Lightube is a simple tool for searching and opening videos from video sharing web sites.  
 
-![](https://gitlab.com/sebaro/Lightube/raw/master/Images/screenshot1.png)  
-![](https://gitlab.com/sebaro/Lightube/raw/master/Images/screenshot2.png)  
+![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot1.png)  
+![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot2.png)  
 
 # Installation  
 
@@ -13,6 +13,6 @@ QtQml
 QtNetwork  
 QtCore
 
-qmake
-make
-./lightube
+qmake  
+make  
+./lightube  
