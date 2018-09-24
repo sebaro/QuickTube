@@ -6,7 +6,8 @@ QT += qml quick widgets
 
 SOURCES += src/main.cpp
 
-HEADERS += src/process.h
+HEADERS += src/process.h \
+	   src/request.h
 
 RESOURCES += src/resources.qrc
 

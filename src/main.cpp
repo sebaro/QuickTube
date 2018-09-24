@@ -4,11 +4,13 @@
 #include <QQuickWindow>
 
 #include "process.h"
+#include "request.h"
 
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
   qmlRegisterType<Process>("Process", 1, 0, "Process");
+  qmlRegisterType<Request>("Request", 1, 0, "Request");
   QQmlApplicationEngine engine;
   engine.load("src/main.qml");
   QObject *topLevel = engine.rootObjects().value(0);
