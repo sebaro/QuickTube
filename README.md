@@ -1,48 +1,52 @@
-Lightube is a simple tool for searching and opening videos from video sharing web sites.  
+Lightube is a simple tool for searching and opening videos from video sharing web sites.
 
-Each result includes three items: the video thumbnail, the video title and the video owner/channel.  
-Clicking the thumbnail or the title will open the video with the chosen application.  
-Clicking the channel will search or list its videos.  
+Each result includes three items: the video thumbnail, the video title and the video owner/channel.
+Clicking the thumbnail or the title will open the video with the chosen application.
+Clicking the channel will search or list its videos.
 
-![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot1.png)  
-![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot2.png)  
+![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot1.png)
+![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot2.png)
 
-# Installation  
 
-Requirements:  
->=qtgui-5.11  
->=qtcore-5.11  
->=qtnetwork-5.11  
->=qtqml-5.11  
->=qtquick-5.11  
->=qtwidgets-5.11  
+# Installation
 
-Build & install  
-qmake  
-make  
-make install  
+#### Requirements:
+     >=qtgui-5.11
+     >=qtcore-5.11
+     >=qtnetwork-5.11
+     >=qtqml-5.11
+     >=qtquick-5.11
+     >=qtwidgets-5.11
 
-# Search options:  
+#### Build & install:
+     qmake
+     make
+     make install
 
-Site: YouTube | Dailymotion | Vimeo  
-Which site to search.  
 
-Results: 25  
-The maximum results per search.  
+# Options
 
-Safe: No | Yes  
-Whether the search results should include restricted content.  
+## Search
 
-Sort: Relevance | Date | Views | Rating | Alphabetical  
-The method that will be used to order results.  
+#### Site: YouTube | Dailymotion | Vimeo
+   - Which site to search.
 
-Channel: No | Yes  
-Whether to search the channel's videos or just list them.  
+#### Results: 25
+   - The maximum results per search.
 
-# Open options:  
+#### Safe: No | Yes
+   - Whether the search results should include restricted content.
 
-Application: mpv  
-What application to use to open the video.  
+#### Sort: Relevance | Date | Views | Rating | Alphabetical
+   - The method that will be used to order results.
 
-Arguments: --ytdl=yes --fs  
-The application arguments.  
+#### Channel: No | Yes
+   - Whether to search the channel's videos or just list them.
+
+## Open
+
+#### Application: mpv
+   - What application to use to open the video.
+
+#### Arguments: --ytdl=yes --fs
+   - The application arguments.
