@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=QuickTube
+Exec=quicktube
+Icon=quicktube
+Comment=Search and open videos
+Categories=Qt;AudioVideo;Video;
+Terminal=false

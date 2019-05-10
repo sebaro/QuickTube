@@ -1,11 +1,12 @@
-Lightube is a simple tool for searching and opening videos from video sharing web sites.
+
+QuickTube is a simple tool for searching and opening videos from video sharing web sites.
 
 Each result includes three items: the video thumbnail, the video title and the video owner/channel.
 Clicking the thumbnail or the title will open the video with the chosen application.
 Clicking the channel will search or list its videos.
 
-![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot1.png)
-![](https://gitlab.com/sebaro/Lightube/raw/master/screenshot2.png)
+![](https://gitlab.com/sebaro/QuickTube/raw/master/screenshot1.png)
+![](https://gitlab.com/sebaro/QuickTube/raw/master/screenshot2.png)
 
 
 # Installation
@@ -45,8 +46,8 @@ Clicking the channel will search or list its videos.
 
 ## Open
 
-#### Application: mpv
-   - What application to use to open the video.
+#### Video: Link | Stream
+   - Whether to open the video link or the video stream.
 
-#### Arguments: --ytdl=yes --fs
-   - The application arguments.
+#### Application: mpv --ytdl=yes --fs
+   - What application used to open the video.

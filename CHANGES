@@ -1,7 +1,11 @@
 
 
-/* Lightube Changelog */
+/* QuickTube Changelog */
 
+
+#2019.05.10
+- adds option to open the video link or the video stream
+- search on key press
 
 #2018.10.01
 - adds search options: safe, sort
