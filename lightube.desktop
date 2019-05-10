@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Lightube
-Exec=lightube
-Icon=lightube.png
-Comment=Search and open videos
-Categories=Qt;AudioVideo;Video;
-Terminal=false
