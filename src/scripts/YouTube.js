@@ -217,7 +217,6 @@ function stream(video, callback) {
 	  else stream = '';
 	}
       }
-      callback(stream);
     }
   }
   request('streams', video);

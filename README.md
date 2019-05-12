@@ -50,4 +50,4 @@ Clicking the channel will search or list its videos.
    - Whether to open the video link or the video stream.
 
 #### Application: mpv --ytdl=yes --fs
-   - What application used to open the video.
+   - What application is used to open the video.

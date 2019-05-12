@@ -35,8 +35,6 @@ Rectangle {
 	height: 50
 	color: "#F1F1F1"
 	anchors.left: parent.left
-	//border.width: 1
-	//border.color: "#DDDDDD"
 	Text {
 	  text: "Search"
 	  font.pixelSize: 18
@@ -114,6 +112,7 @@ Rectangle {
 	      anchors.fill: parent
 	      selectByMouse: true
 	      clip: true
+	      verticalAlignment: TextInput.AlignVCenter
 	    }
 	  }
 	}
@@ -238,8 +237,6 @@ Rectangle {
 	height: 50
 	color: "#F1F1F1"
 	anchors.left: parent.left
-	//border.width: 1
-	//border.color: "#DDDDDD"
 	Text {
 	  text: "Open"
 	  font.pixelSize: 18
@@ -317,6 +314,7 @@ Rectangle {
 	      anchors.fill: parent
 	      selectByMouse: true
 	      clip: true
+	      verticalAlignment: TextInput.AlignVCenter
 	    }
 	  }
 	}
@@ -339,8 +337,6 @@ Rectangle {
 	height: 50
 	color: "#F1F1F1"
 	anchors.left: parent.left
-	//border.width: 1
-	//border.color: "#DDDDDD"
 	Text {
 	  text: "About"
 	  font.pixelSize: 18
@@ -382,6 +378,7 @@ Rectangle {
 	      padding: 10
 	      anchors.fill: parent
 	      clip: true
+	      verticalAlignment: TextInput.AlignVCenter
 	    }
 	  }
 	}
@@ -419,6 +416,7 @@ Rectangle {
 	      clip: true
 	      textFormat: Text.RichText
 	      onLinkActivated: Qt.openUrlExternally(link)
+	      verticalAlignment: TextInput.AlignVCenter
 	      MouseArea {
 		anchors.fill: parent
 		acceptedButtons: Qt.NoButton
@@ -461,6 +459,7 @@ Rectangle {
 	      clip: true
 	      textFormat: Text.RichText
 	      onLinkActivated: Qt.openUrlExternally(link)
+	      verticalAlignment: TextInput.AlignVCenter
 	      MouseArea {
 		anchors.fill: parent
 		acceptedButtons: Qt.NoButton

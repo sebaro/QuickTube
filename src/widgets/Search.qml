@@ -18,9 +18,11 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     // Logo
     Rectangle {
-      width: 220
+      color: "#FFFFFF"
+      border.width: 1
+      border.color: "#E1E1E1"
+      width: 120
       height: 40
-      color: "#F1F1F1"
       Image {
 	source: "qrc:/images/logo.png"
 	anchors.verticalCenter: parent.verticalCenter
@@ -32,7 +34,7 @@ Rectangle {
       color: "#FFFFFF"
       border.width: 1
       border.color: "#E1E1E1"
-      width: Math.floor(mainWidget.width * 60 / 100)
+      width: Math.floor(mainWidget.width * 70 / 100)
       height: 40
       TextInput {
 	id: searchInput
@@ -41,6 +43,7 @@ Rectangle {
 	anchors.fill: parent
 	selectByMouse: true
 	focus: true
+	verticalAlignment: TextInput.AlignVCenter
 	onAccepted: {
 	  searchWidget.height = 100
 	  optionsButton.visible = true
