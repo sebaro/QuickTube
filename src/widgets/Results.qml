@@ -5,6 +5,7 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 
 Rectangle {
@@ -48,6 +49,7 @@ Rectangle {
 	  font.bold: true
 	  color: "#555555"
 	  MouseArea {
+	    id: titleMouseArea
 	    cursorShape: Qt.PointingHandCursor
 	    anchors.fill: parent
 	    hoverEnabled: true
@@ -60,6 +62,11 @@ Rectangle {
 	    onExited: {
 	      parent.color = "#555555"
 	    }
+	  }
+	  ToolTip {
+	    text: videoTitle
+	    visible: titleMouseArea.containsMouse
+	    delay: 0
 	  }
 	}
 	Text {

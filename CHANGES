@@ -3,7 +3,18 @@
 /* QuickTube Changelog */
 
 
+#2019.05.31
+- fixes YouTube
+- shows full video title tooltip on video title hover
+
+#2019.05.11
+- changes search bar logo
+- fixes text input vertical alignment
+- fixes opening video twice for YouTube
+
 #2019.05.10
+- changes name from Lightube to QuickTube
+- changes logo
 - adds option to open the video link or the video stream
 - search on key press
 

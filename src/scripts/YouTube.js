@@ -58,7 +58,7 @@ function search(channel, pageToken) {
 	}
       }
       else {
-	if (debug) console.log("XHR Error: "  + '\n' + xhrequest.status, xhrequest.statusText + '\n');
+	if (debug) console.log("XHR Error: "  + '\n', 'URL: ' + url + '\n', 'Status: ' + xhrequest.status + '\n', 'StatusTest: ' + xhrequest.statusText + '\n');
       }
     }
   }
@@ -89,7 +89,7 @@ function stream(video, callback) {
 	  process(action, url, xhrequest.responseText);
 	}
 	else {
-	  if (debug) console.log("XHR Error: " + '\n' + xhrequest.status, xhrequest.statusText + '\n');
+	  if (debug) console.log("XHR Error: "  + '\n', 'URL: ' + url + '\n', 'Status: ' + xhrequest.status + '\n', 'StatusTest: ' + xhrequest.statusText + '\n');
 	}
       }
     }
@@ -115,7 +115,9 @@ function stream(video, callback) {
 	streams = clean(streams, true);
       }
       if (!streams) {
-	if (url.indexOf('/watch') != -1) request('streams', video.replace(/watch\?v/, 'get_video_info?video_id'));
+	if (url.indexOf('/watch') != -1) {
+	  request('streams', video.replace(/watch\?v/, 'get_video_info?video_id') + '&eurl=https://youtube.googleapis.com/v/');
+	}
       }
       else {
 	if (live) {
@@ -154,7 +156,7 @@ function stream(video, callback) {
 	      else stream = stream.replace(/&type=(video|audio).*$/, '');
 	      if (stream.match(/xtags=[^%=]*&/)) stream = stream.replace(/xtags=[^%=]*?&/, '');
 	      else if (stream.match(/&xtags=[^%=]*$/)) stream = stream.replace(/&xtags=[^%=]*$/, '');
-	      if (stream.match(/&sig=/)) stream = stream.replace(/&sig=/, '&signature=');
+	      if (stream.match(/&sig=/) && !stream.match(/&lsig=/)) stream = stream.replace(/&sig=/, '&signature=');
 	      stream = clean(stream, true);
 	      if (stream.indexOf('ratebypass') == -1) stream += '&ratebypass=yes';
 	    }
@@ -162,7 +164,7 @@ function stream(video, callback) {
 	  if (stream && stream.indexOf('http') == 0) {
 	    if (stream.match(/&s=/)) {
 	      if (script) request('signature', script);
-	      else request('script', video.replace(/watch\?v=/, 'embed'));
+	      else request('script', video.replace(/watch\?v=/, 'embed/'));
 	    }
 	    else {
 	      callback(stream);
@@ -208,7 +210,7 @@ function stream(video, callback) {
 	    signv = signdec(signv);
 	    if (signv) {
 	      signp = stream.match(/&sp=(.*?)(&|$)/);
-	      signp = (signp) ? signp[1] : 'signature';
+	      signp = (signp) ? signp[1] : ((stream.match(/&lsig=/)) ? 'sig' : 'signature');
 	      stream = stream.replace(/&s=.*?(&|$)/, '&' + signp + '=' + signv + '$1');
 	      callback(stream);
 	    }
@@ -228,8 +230,10 @@ function test() {
   //-SIG https://www.youtube.com/watch?v=IxkmW-MVBAY
   //+SIG https://www.youtube.com/watch?v=yXQViqx6GMY
   //AGER https://www.youtube.com/watch?v=Fy6TsNNoL3w
+  //AGER https://www.youtube.com/watch?v=c8Q77saURbE
+  //AGER https://www.youtube.com/watch?v=evDAi77IDhY
   //LIVE https://www.youtube.com/watch?v=hHW1oY26kxQ
-  stream('https://www.youtube.com/watch?v=IxkmW-MVBAY', function(data) {
+  stream('https://www.youtube.com/watch?v=evDAi77IDhY', function(data) {
     console.log('Stream: ' + '\n' + data + '\n');
   });
 }

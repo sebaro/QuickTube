@@ -23,7 +23,7 @@ Window {
   minimumHeight: 400
 
   // Version
-  property string version: "2019.05.11"
+  property string version: "2019.05.31"
 
   // Variables
   property int totalResults: 0
