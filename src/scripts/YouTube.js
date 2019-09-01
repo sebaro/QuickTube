@@ -46,7 +46,7 @@ function search(channel, pageToken) {
 	  gridModel.append({
 	    "videoThumbnail": result.items[i].snippet.thumbnails.medium.url,
 	    "videoLink": "https://www.youtube.com/watch?v=" + result.items[i].id.videoId,
-	    "videoTitle": result.items[i].snippet.title.replace(/&#39;/g, '\'').replace(/&amp;/g, '&'),
+	    "videoTitle": result.items[i].snippet.title.replace(/&#39;/g, '\'').replace(/&amp;/g, '&').replace(/&quot;/g, '"'),
 	    "channelTitle": result.items[i].snippet.channelTitle,
 	    "channelID": result.items[i].snippet.channelId,
 	  });
@@ -187,7 +187,7 @@ function stream(video, callback) {
       var signfn, signfb, swapfn, swapfb, funcm, signv, signp;
       data = data.replace(/(\r\n|\n|\r)/gm, '');
       signfn = data.match(/"signature"\s*,\s*([^\)]*?)\(/);
-      if (!signfn) signfn = data.match(/d.set\(b,(?:encodeURIComponent\()?.*?([a-zA-Z0-9$]+)\(/);
+      if (!signfn) signfn = data.match(/c&&.\.set\(b,(?:encodeURIComponent\()?.*?([a-zA-Z0-9$]+)\(/);
       signfn = (signfn) ? signfn[1] : null;
       if (signfn) {
 	funcm = signfn.replace(/\$/, '\\$') + '\\s*=\\s*function\\s*' + '\\s*\\(\\w+\\)\\s*\\{(.*?)\\}';
