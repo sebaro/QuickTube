@@ -3,6 +3,10 @@
 /* QuickTube Changelog */
 
 
+#2021.04.18
+- searches on Enter key press
+- uses web search API for YouTube
+
 #2019.05.31
 - fixes YouTube
 - shows full video title tooltip on video title hover

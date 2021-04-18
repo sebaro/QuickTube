@@ -2,17 +2,17 @@
 <RCC version="1.0">
 
 <qresource prefix="/">
-    <file>widgets/Window.qml</file>
-    <file>widgets/Search.qml</file>
-    <file>widgets/Results.qml</file>
-    <file>widgets/Options.qml</file>
-    <file>scripts/YouTube.js</file>
-    <file>scripts/Dailymotion.js</file>
-    <file>scripts/Vimeo.js</file>
-    <file>images/logo.png</file>
-    <file>images/search.png</file>
-    <file>images/up.png</file>
-    <file>images/down.png</file>
+	<file>widgets/Window.qml</file>
+	<file>widgets/Search.qml</file>
+	<file>widgets/Results.qml</file>
+	<file>widgets/Options.qml</file>
+	<file>scripts/YouTube.js</file>
+	<file>scripts/Dailymotion.js</file>
+	<file>scripts/Vimeo.js</file>
+	<file>images/logo.png</file>
+	<file>images/search.png</file>
+	<file>images/up.png</file>
+	<file>images/down.png</file>
 </qresource>
 
 </RCC>

@@ -7,19 +7,19 @@ QT += qml quick widgets
 SOURCES += src/main.cpp
 
 HEADERS += src/tools/process.h \
-	   src/tools/request.h
+           src/tools/request.h
 
 RESOURCES += src/resources.qrc
 
 # BUILD
 
 CONFIG(release) {
-  unix:OBJECTS_DIR = ./build/.obj/unix
-  win32:OBJECTS_DIR = ./build/.obj/win32
-  mac:OBJECTS_DIR = ./build/.obj/mac
-  UI_DIR = ./build/.ui
-  MOC_DIR = ./build/.moc
-  RCC_DIR = ./build/.rcc
+	unix:OBJECTS_DIR = ./build/.obj/unix
+	win32:OBJECTS_DIR = ./build/.obj/win32
+	mac:OBJECTS_DIR = ./build/.obj/mac
+	UI_DIR = ./build/.ui
+	MOC_DIR = ./build/.moc
+	RCC_DIR = ./build/.rcc
 }
 
 # INSTALL
