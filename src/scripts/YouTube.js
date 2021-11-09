@@ -35,57 +35,14 @@ function search(channel, params) {
 		// Safe
 		var	safe = (safeInput.currentText == 'Yes') ? true : false;
 		// Sort
-		var sort = 'EgZzZWFyY2g%3D';
-		if (sortInput.currentText == 'Relevance') {
-			if (channel) {
-				if (query == 'list') {
-					sort = 'EgZ2aWRlb3M%3D';
-				}
-			}
-			else {
-				sort = 'CAA';
-			}
-		}
-		else if (sortInput.currentText == 'Date') {
-			if (channel) {
-				if (query == 'list') {
-					sort = 'EgZ2aWRlb3M%3D';
-				}
-			}
-			else {
-				sort = 'CAI';
-			}
-		}
-		else if (sortInput.currentText == 'Views') {
-			if (channel) {
-				if (query == 'list') {
-					sort = 'EgZ2aWRlb3MYAiAAMAE%3D';
-				}
-			}
-			else {
-				sort = 'CAM';
-			}
-		}
-		else if (sortInput.currentText == 'Rating') {
-			if (channel) {
-				if (query == 'list') {
-					sort = 'EgZ2aWRlb3MYASAAMAE%3D';
-				}
-			}
-			else {
-				sort = 'CAE';
-			}
-		}
-		else if (sortInput.currentText == 'Alphabetical') {
-			if (channel) {
-				if (query == 'list') {
-					sort = 'EgZ2aWRlb3M%3D';
-				}
-			}
-			else {
-				sort = 'CAI';
-			}
-		}
+		var sorts = {
+			'Relevance': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAA'},
+			'Date': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAI'},
+			'Views': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3MYAiAAMAE%3D'}, 'videos': 'CAM'},
+			'Rating': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3MYASAAMAE%3D'}, 'videos': 'CAE'},
+			'Alphabetical': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAI'}
+		};
+		var sort = (channel) ? sorts[sortInput.currentText]['channel'][query] : sorts[sortInput.currentText]['videos'];
 		if (channel) {
 			url = 'https://www.youtube.com/youtubei/v1/browse?key=' + params['api_key'];
 		}
@@ -239,7 +196,13 @@ function search(channel, params) {
 
 function stream(video, callback) {
 	var streams, stream, script, parser;
-	var live = false;
+	var id = parse(video, /(?:\?|&)v=(.*?)(&|$)/);
+	var purl = 'https://www.youtube.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
+	var pdatas = {
+		'default':{'context':{'client':{'clientName':'ANDROID','clientVersion':'16.20'}},'videoId':id},
+		'embed': {'context':{'client':{'clientName':'ANDROID','clientVersion':'16.20','clientScreen':'EMBED'},'thirdParty':{'embedUrl':'https://www.youtube.com'}},'videoId':id}
+	};
+	var pdata = pdatas['default'];
 	function clean(content, unesc) {
 		if (unesc) content = unescape(content);
 		content = content.replace(/\\u0025/g, '%').replace(/\\u0026/g, '&').replace(/\\u002F/g, '/');
@@ -247,132 +210,88 @@ function stream(video, callback) {
 		content = content.replace(/\\/g, '').replace(/\n/g, '');
 		return content;
 	}
-	function parse(content, pattern, clean) {
-		if (clean) content = clean(content, true);
+	function parse(content, pattern) {
 		var parser = content.match(pattern);
 		return (parser) ? parser[1] : null;
 	}
 	function request(action, url) {
+		var data = null;
+		if (url.indexOf('|') != -1) {
+			data = url.split('|')[1];
+			url = url.split('|')[0];
+		}
 		var xhrequest = new XMLHttpRequest();
-		xhrequest.open('GET', url, true);
+		if (data) {
+			xhrequest.open('POST', url, true);
+			xhrequest.setRequestHeader('content-type', 'application/json');
+		}
+		else {
+			xhrequest.open('GET', url, true);
+		}
 		xhrequest.onreadystatechange = function() {
 			if (xhrequest.readyState === XMLHttpRequest.DONE) {
 				if (xhrequest.status && xhrequest.status === 200) {
-					process(action, url, xhrequest.responseText);
+					process(action, xhrequest.responseText || xhrequest.responseXML);
 				}
 				else {
-					if (debug) console.log('XHR Error: '  + '\n', 'URL: ' + url + '\n', 'Status: ' + xhrequest.status + '\n', 'StatusTest: ' + xhrequest.statusText + '\n');
+					if (debug) console.log('XHR Error: '  + '\n', 'URL: ' + url + '\n' + 'data: ' + data + '\n', 'Status: ' + xhrequest.status + '\n', 'StatusTest: ' + xhrequest.statusText + '\n');
 				}
 			}
 		}
-		xhrequest.send();
+		xhrequest.send(data);
 	}
-	function process(action, url, data) {
-		if (action == 'streams') {
-			if (url.indexOf('/watch') != -1) {
-				streams = parse(data, '"url_encoded_fmt_stream_map\\\\?":\\s*\\\\?"(.*?)\\\\?"', false);
-				if (!streams) {
-					streams = parse(data, '"formats\\\\?":\\s*(\\[.*?\\])', false);
-					if (streams) {
-						streams = clean(streams, false);
-						parser = streams.match(new RegExp('"(url|cipher|signatureCipher)":\s*".*?"', 'g'));
-						if (parser) {
-							streams = '';
-							for (var i = 0 ; i < parser.length; i++) {
-								streams += parser[i].replace(/"/g, '').replace('url:', 'url=').replace('cipher:', '').replace('signatureCipher:', '') + ','
-							}
-							if (streams.indexOf('itag%3D') != -1) {
-								streams = clean(streams, true);
-							}
-						}
-					}
-				}
-				if (!streams) {
-					streams = parse(data, '"hls(?:vp|ManifestUrl)\\\\?":\\s*\\\\?"(.*?)\\\\?"', false);
-					if (streams) live = true;
-				}
-				script = parse(data, '"js":\\s*"(.*?)"', false);
-				if (script) {
-					script = clean(script, false);
-					script = 'https://www.youtube.com' + script;
-					if (debug) console.log('Script from page: ' + '\n' + script + '\n');
-				}
+	function process(action, data) {
+		if (action == 'fetch') {
+			if (streams) {
+				pdata = pdatas['embed'];
 			}
-			else if (url.indexOf('/get_video_info') != -1) {
-				streams = parse(data, 'url_encoded_fmt_stream_map=(.*?)&', false);
-				if ( streams) {
-					streams = clean(streams, true);
-				}
-				else {
-					streams = parse(data, 'formats%22%3A(%5B.*?%5D)', false);
-					if (streams) {
-						streams = clean(streams, true);
-						parser = streams.match(new RegExp('"(url|cipher|signatureCipher)":\s*".*?"', 'g'));
-						if (parser) {
-							streams = '';
-							for (var i = 0 ; i < parser.length; i++) {
-								streams += parser[i].replace(/"/g, '').replace('url:', 'url=').replace('cipher:', '').replace('signatureCipher:', '') + ','
-							}
-							if (streams.indexOf('itag%3D') != -1) {
-								streams = clean(streams, true);
-							}
-						}
-					}
-				}
+			streams = request('parse', purl + '|' + JSON.stringify(pdata));
+		}
+		else if (action == 'parse') {
+			try {
+				streams = JSON.parse(data);
 			}
-			if (!streams) {
-				if (url.indexOf('/watch') != -1) {
-					request('streams', video.replace(/watch\?v/, 'get_video_info?video_id') + '&eurl=https://youtube.googleapis.com/v/');
-				}
+			catch(e) {
+				streams = {};
+			}
+			streams = (streams['streamingData']) ? streams['streamingData'] : {};
+			if (!streams['formats'] && streams['hlsManifestUrl']) {
+				callback(streams['hlsManifestUrl']);
 			}
 			else {
-				if (live) {
-					stream = clean(streams, false);
-					callback(stream);
+				if (!streams['formats']) {
+					if (pdata != pdatas['embed']) {
+						process('fetch');
+					}
+					else {
+						if (debug) console.log('Error: no videos found \n');
+					}
 				}
 				else {
-					if (debug) console.log('Streams: ' + '\n' + streams + '\n');
-					streams = streams.split(',');
-					var itag;
+					streams = streams['formats'];
 					for (var i = 0; i < streams.length; i++) {
-						if (!streams[i].match(/^url/)) {
-							parser = streams[i].match(/(.*)(url=.*$)/);
-							if (parser) streams[i] = parser[2] + '&' + parser[1];
-						}
-						parser = streams[i].match(/itag=(\d{1,3})/);
-						itag = (parser) ? parser[1] : null;
-						if (itag == '22' || itag == '18') {
-							if (stream) continue;
-							stream = clean(streams[i], true);
-							stream = stream.replace(/url=/, '').replace(/&$/, '');
-							if (debug) console.log('Stream: ' + '\n' + stream + '\n');
-							if (stream.match(/itag=/) && stream.match(/itag=/g).length > 1) {
-								if (stream.match(/itag=\d{1,3}&/)) stream = stream.replace(/itag=\d{1,3}&/, '');
-								else if (stream.match(/&itag=\d{1,3}/)) stream = stream.replace(/&itag=\d{1,3}/, '');
+						if (stream) break;
+						if (streams[i]['itag'] != '22' && streams[i]['itag'] != '18') continue;
+						if (streams[i]['signatureCipher'] || streams[i]['cipher']) {
+							stream = streams[i]['signatureCipher'] || streams[i]['cipher'];
+							stream = clean(stream, true);
+							parser = stream.match(/(.*)(url=.*$)/);
+							if (parser) {
+								stream = parser[2] + '&' + parser[1];
+								stream = stream.replace(/url=/, '').replace(/&$/, '');
 							}
-							if (stream.match(/clen=/) && stream.match(/clen=/g).length > 1) {
-								if (stream.match(/clen=\d+&/)) stream = stream.replace(/clen=\d+&/, '');
-								else if (stream.match(/&clen=\d+/)) stream = stream.replace(/&clen=\d+/, '');
-							}
-							if (stream.match(/lmt=/) && stream.match(/lmt=/g).length > 1) {
-								if (stream.match(/lmt=\d+&/)) stream = stream.replace(/lmt=\d+&/, '');
-								else if (stream.match(/&lmt=\d+/)) stream = stream.replace(/&lmt=\d+/, '');
-							}
-							if (stream.match(/type=(video|audio).*?&/)) stream = stream.replace(/type=(video|audio).*?&/, '');
-							else stream = stream.replace(/&type=(video|audio).*$/, '');
-							if (stream.match(/xtags=[^%=]*&/)) stream = stream.replace(/xtags=[^%=]*?&/, '');
-							else if (stream.match(/&xtags=[^%=]*$/)) stream = stream.replace(/&xtags=[^%=]*$/, '');
-							if (stream.match(/&sig=/) && !stream.match(/&lsig=/)) stream = stream.replace(/&sig=/, '&signature=');
 							stream = clean(stream, true);
 							if (stream.indexOf('ratebypass') == -1) stream += '&ratebypass=yes';
-						}
-					}
-					if (stream && stream.indexOf('http') == 0) {
-						if (stream.match(/&s=/)) {
-							if (script) request('signature', script);
-							else request('script', video.replace(/watch\?v=/, 'embed/'));
+							request('script', video.replace(/watch\?v=/, 'embed/'));
 						}
 						else {
+							stream = streams[i]['url'];
+							stream = clean(stream, true);
+							if (/&sig=/.test(stream) && !/&lsig=/.test(stream)) {
+								stream = stream.replace(/&sig=/, '&signature=');
+							}
+							stream = clean(stream, true);
+							if (stream.indexOf('ratebypass') == -1) stream += '&ratebypass=yes';
 							callback(stream);
 						}
 					}
@@ -428,7 +347,7 @@ function stream(video, callback) {
 			}
 		}
 	}
-	request('streams', video);
+	process('fetch');
 }
 
 function test() {
@@ -440,7 +359,7 @@ function test() {
 	//AGER https://www.youtube.com/watch?v=c8Q77saURbE
 	//AGER https://www.youtube.com/watch?v=evDAi77IDhY
 	//LIVE https://www.youtube.com/watch?v=hHW1oY26kxQ
-	stream('https://www.youtube.com/watch?v=c8Q77saURbE', function(data) {
+	stream('https://www.youtube.com/watch?v=yXQViqx6GMY', function(data) {
 		console.log('Stream: ' + '\n' + data + '\n');
 	});
 }
