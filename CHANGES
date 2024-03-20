@@ -3,6 +3,9 @@
 /* QuickTube Changelog */
 
 
+#2024.03.20
+- fixes YouTube
+
 #2021.04.18
 - searches on Enter key press
 - uses web search API for YouTube

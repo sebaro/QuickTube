@@ -4,8 +4,8 @@
  *
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick 2.15
+import QtQuick.Window 2.15
 import Qt.labs.settings 1.0
 
 import Process 1.0
@@ -23,7 +23,7 @@ Window {
 	minimumHeight: 400
 
 	// Version
-	property string version: "2021.04.18"
+	property string version: "2024.03.20"
 
 	// Variables
 	property int totalResults: 0

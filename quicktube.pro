@@ -2,7 +2,7 @@
 TARGET = quicktube
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += network qml quick quickcontrols2 widgets
 
 SOURCES += src/main.cpp
 

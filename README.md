@@ -12,12 +12,12 @@ Clicking the channel will search or list its videos.
 # Installation
 
 #### Requirements:
-     >=qtgui-5.11
-     >=qtcore-5.11
-     >=qtnetwork-5.11
-     >=qtqml-5.11
-     >=qtquick-5.11
-     >=qtwidgets-5.11
+     >=qtgui-5.15
+     >=qtcore-5.15
+     >=qtnetwork-5.15
+     >=qtqml-5.15
+     >=qtquick-5.15
+     >=qtwidgets-5.15
 
 #### Build & install:
      qmake

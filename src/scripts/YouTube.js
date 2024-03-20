@@ -31,16 +31,16 @@ function search(channel, params) {
 		var url, data, json, contents, renderer;
 		var results = 0;
 		// Query: Search/List
-		var query = (channel) ? ((channelInput.currentText == 'Yes') ? 'search' : 'list') : 'search';
+		var query = (channel) ? ((channelInput.currentText == 'Yes') ? 'search' : 'browse') : 'search';
 		// Safe
 		var	safe = (safeInput.currentText == 'Yes') ? true : false;
 		// Sort
 		var sorts = {
-			'Relevance': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAA'},
-			'Date': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAI'},
-			'Views': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3MYAiAAMAE%3D'}, 'videos': 'CAM'},
-			'Rating': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3MYASAAMAE%3D'}, 'videos': 'CAE'},
-			'Alphabetical': {'channel': {'search': 'EgZzZWFyY2g%3D', 'list': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAI'}
+			'Relevance': {'channel': {'search': 'EgZzZWFyY2g%3D', 'browse': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAA'},
+			'Date': {'channel': {'search': 'EgZzZWFyY2g%3D', 'browse': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAI'},
+			'Views': {'channel': {'search': 'EgZzZWFyY2g%3D', 'browse': 'EgZ2aWRlb3MYAiAAMAE%3D'}, 'videos': 'CAM'},
+			'Rating': {'channel': {'search': 'EgZzZWFyY2g%3D', 'browse': 'EgZ2aWRlb3MYASAAMAE%3D'}, 'videos': 'CAE'},
+			'Alphabetical': {'channel': {'search': 'EgZzZWFyY2g%3D', 'browse': 'EgZ2aWRlb3M%3D'}, 'videos': 'CAI'}
 		};
 		var sort = (channel) ? sorts[sortInput.currentText]['channel'][query] : sorts[sortInput.currentText]['videos'];
 		if (channel) {
@@ -55,7 +55,7 @@ function search(channel, params) {
 		}
 		else {
 			if (channel) {
-				if (query == 'list') {
+				if (query == 'browse') {
 					data += '"browseId":"' + channel + '","params":"' + sort + '"}'
 				}
 				else {
@@ -80,11 +80,16 @@ function search(channel, params) {
 					contents = [];
 					if (json && json.contents) {
 						if (channel) {
-							if (query == 'list') {
-								contents = json.contents.twoColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].gridRenderer.items;
+							if (query == 'browse') {
+								contents = json.contents.twoColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.richGridRenderer.contents;
 							}
 							else {
-								contents = json.contents.twoColumnBrowseResultsRenderer.tabs[6].expandableTabRenderer.content.sectionListRenderer.contents;
+								for (var i = 0; i < json.contents.twoColumnBrowseResultsRenderer.tabs.length; i++) {
+									if (json.contents.twoColumnBrowseResultsRenderer.tabs[i].expandableTabRenderer) {
+										contents = json.contents.twoColumnBrowseResultsRenderer.tabs[i].expandableTabRenderer.content.sectionListRenderer.contents;
+										break;
+									}
+								}
 							}
 							params['channel_title'] = json.metadata.channelMetadataRenderer.title;
 						}
@@ -109,8 +114,8 @@ function search(channel, params) {
 					if (contents) {
 						for (var i = 0; i < contents.length; i++) {
 							if (channel) {
-								if (query == 'list') {
-									renderer = contents[i].gridVideoRenderer;
+								if (query == 'browse') {
+									renderer = contents[i].richItemRenderer.content.videoRenderer;
 								}
 								else {
 									renderer = contents[i].itemSectionRenderer.contents[0].videoRenderer;
@@ -156,7 +161,7 @@ function search(channel, params) {
 					if (totalResults < results && totalResults < resultsInput.text) {
 						if (json && json.contents) {
 							if (channel) {
-								if (query == 'list') {
+								if (query == 'browse') {
 									contents = json.contents.twoColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].gridRenderer.items[30];
 								}
 								else {
@@ -195,12 +200,12 @@ function search(channel, params) {
 }
 
 function stream(video, callback) {
-	var streams, stream, script, parser;
+	var streams, stream, parser;
 	var id = parse(video, /(?:\?|&)v=(.*?)(&|$)/);
-	var purl = 'https://www.youtube.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
+	var purl = 'https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w';
 	var pdatas = {
-		'default':{'context':{'client':{'clientName':'ANDROID','clientVersion':'16.20'}},'videoId':id},
-		'embed': {'context':{'client':{'clientName':'ANDROID','clientVersion':'16.20','clientScreen':'EMBED'},'thirdParty':{'embedUrl':'https://www.youtube.com'}},'videoId':id}
+		'default':{'context':{'client':{'clientName':'ANDROID','clientVersion':'19.09.37','androidSdkVersion':30}},'params':'CgIQBg==','videoId':id},
+		'embed': {'context':{'client':{'clientName':'ANDROID','clientVersion':'19.09.37','clientScreen':'EMBED','androidSdkVersion':30},'thirdParty':{'embedUrl':'https://www.youtube.com'}},'params':'CgIQBg==','videoId':id}
 	};
 	var pdata = pdatas['default'];
 	function clean(content, unesc) {
@@ -220,6 +225,7 @@ function stream(video, callback) {
 			data = url.split('|')[1];
 			url = url.split('|')[0];
 		}
+		if (debug) console.log('XHR Request: '  + '\n', 'URL: ' + url + '\n' + 'data: ' + data + '\n');
 		var xhrequest = new XMLHttpRequest();
 		if (data) {
 			xhrequest.open('POST', url, true);
@@ -270,79 +276,13 @@ function stream(video, callback) {
 				else {
 					streams = streams['formats'];
 					for (var i = 0; i < streams.length; i++) {
-						if (stream) break;
-						if (streams[i]['itag'] != '22' && streams[i]['itag'] != '18') continue;
-						if (streams[i]['signatureCipher'] || streams[i]['cipher']) {
-							stream = streams[i]['signatureCipher'] || streams[i]['cipher'];
-							stream = clean(stream, true);
-							parser = stream.match(/(.*)(url=.*$)/);
-							if (parser) {
-								stream = parser[2] + '&' + parser[1];
-								stream = stream.replace(/url=/, '').replace(/&$/, '');
-							}
-							stream = clean(stream, true);
-							if (stream.indexOf('ratebypass') == -1) stream += '&ratebypass=yes';
-							request('script', video.replace(/watch\?v=/, 'embed/'));
-						}
-						else {
+						if (streams[i]['itag'] == '18' || streams[i]['itag'] == '22') {
 							stream = streams[i]['url'];
 							stream = clean(stream, true);
-							if (/&sig=/.test(stream) && !/&lsig=/.test(stream)) {
-								stream = stream.replace(/&sig=/, '&signature=');
-							}
-							stream = clean(stream, true);
 							if (stream.indexOf('ratebypass') == -1) stream += '&ratebypass=yes';
-							callback(stream);
 						}
 					}
-				}
-			}
-		}
-		else if (action == 'script') {
-			script = parse(data, '"js(?:Url)?":\\s*"(.*?)"', false);
-			if (script) {
-				script = clean(script, false);
-				script = 'https://www.youtube.com' + script;
-				request('signature', script);
-				if (debug) console.log('Script from embed: ' + '\n' + script + '\n');
-			}
-		}
-		else if (action == 'signature') {
-			function signdec(s) {return null;}
-			var signfn, signfb, swapfn, swapfb, funcm, signv, signp;
-			data = data.replace(/(\r\n|\n|\r)/gm, '');
-			signfn = data.match(/"signature"\s*,\s*([^\)]*?)\(/);
-			if (!signfn) signfn = data.match(/c&&.\.set\(b,(?:encodeURIComponent\()?.*?([a-zA-Z0-9$]+)\(/);
-			if (!signfn) signfn = data.match(/c&&\([a-zA-Z0-9$]+=([a-zA-Z0-9$]+)\(decodeURIComponent/);
-			signfn = (signfn) ? signfn[1] : null;
-			if (signfn) {
-				funcm = ';' + signfn.replace(/\$/, '\\$') + '\\s*=\\s*function\\s*' + '\\s*\\(\\w+\\)\\s*\\{(.*?)\\}';
-				signfb = data.match(funcm);
-				signfb = (signfb) ? signfb[1] : null;
-				if (signfb) {
-					swapfn = signfb.match(/((\$|_|\w)+)\.(\$|_|\w)+\(\w,[0-9]+\)/);
-					swapfn = (swapfn) ? swapfn[1] : null;
-					if (swapfn) {
-						funcm = 'var\\s+' + swapfn.replace(/\$/, '\\$') + '=\\s*\\{(.*?)\\};';
-						swapfb = data.match(funcm);
-						swapfb = (swapfb) ? swapfb[1] : null;
-					}
-					if (swapfb) signfb = 'var ' + swapfn + '={' + swapfb + '};' + signfb;
-					signfb = 'try {' + signfb + '} catch(e) {return null}';
-					signdec = new Function('a', signfb);
-					signv = stream.match(/&s=(.*?)(&|$)/);
-					signv = (signv) ? signv[1] : null;
-					if (signv) {
-						signv = signdec(signv);
-						if (signv) {
-							signp = stream.match(/&sp=(.*?)(&|$)/);
-							signp = (signp) ? signp[1] : ((stream.match(/&lsig=/)) ? 'sig' : 'signature');
-							stream = stream.replace(/&s=.*?(&|$)/, '&' + signp + '=' + signv + '$1');
-							callback(stream);
-						}
-						else stream = '';
-					}
-					else stream = '';
+					callback(stream);
 				}
 			}
 		}
@@ -358,9 +298,10 @@ function test() {
 	//AGER https://www.youtube.com/watch?v=Fy6TsNNoL3w
 	//AGER https://www.youtube.com/watch?v=c8Q77saURbE
 	//AGER https://www.youtube.com/watch?v=evDAi77IDhY
-	//LIVE https://www.youtube.com/watch?v=hHW1oY26kxQ
+	//LIVE https://www.youtube.com/watch?v=jfKfPfyJRdk
 	stream('https://www.youtube.com/watch?v=yXQViqx6GMY', function(data) {
 		console.log('Stream: ' + '\n' + data + '\n');
 	});
 }
+//var debug = true;
 //test();
