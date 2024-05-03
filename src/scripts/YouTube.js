@@ -204,8 +204,9 @@ function stream(video, callback) {
 	var id = parse(video, /(?:\?|&)v=(.*?)(&|$)/);
 	var purl = 'https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w';
 	var pdatas = {
-		'default':{'context':{'client':{'clientName':'ANDROID','clientVersion':'19.09.37','androidSdkVersion':30}},'params':'CgIIAQ==','videoId':id},
-		'embed': {'context':{'client':{'clientName':'ANDROID','clientVersion':'19.09.37','clientScreen':'EMBED','androidSdkVersion':30},'thirdParty':{'embedUrl':'https://www.youtube.com'}},'params':'CgIIAQ==','videoId':id}
+		'default':{'context':{'client':{'clientName':'IOS','clientVersion':'19.09.3'}},'params':'CgIIAQ==','videoId':id},
+		//'embed': {'context':{'client':{'clientName':'ANDROID','clientVersion':'19.09.37','clientScreen':'EMBED','androidSdkVersion':30},'thirdParty':{'embedUrl':'https://www.youtube.com'}},'params':'CgIIAQ==','videoId':id}
+		'embed': {'context':{'client':{'clientName':'TVHTML5_SIMPLY_EMBEDDED_PLAYER','clientVersion':'2.0','clientScreen':'EMBED'},'thirdParty':{'embedUrl':'https://www.youtube.com'}},'videoId':id}
 	};
 	var pdata = pdatas['default'];
 	function clean(content, unesc) {
